@@ -26,6 +26,21 @@ define(["qlik", "./echarts/echarts", "./echarts/world"],
                 label: "发散"
             }],
             defaultValue: 0
+        };
+
+        var DotOff = {
+            type: "boolean",
+            component: "switch",
+            label: "是否开启数据点",
+            ref: "map.props.DotOff",
+            options: [{
+                value: true,
+                label: "On"
+            }, {
+                value: false,
+                label: "Off"
+            }],
+            defaultValue: true
         }
 
         return {
@@ -57,14 +72,21 @@ define(["qlik", "./echarts/echarts", "./echarts/world"],
                     settings: {
                         uses: "settings"
                     },
+                    mapDotSetting: {
+                        type: 'items',
+                        label: '地图数据点设置',
+                        items: {
+                            DotOff: DotOff
+                        }
+                    },
                     mapLineSetting: {
-                        type: "items",
+                        type: 'items',
                         label: '地图点连线设置',
                         items: {
                             lineType: lineType,
-                            centerDot: centerDot
+                            centerDot: centerDot,
                         }
-                    }
+                    },
                 }
             },
             support: {
@@ -85,17 +107,23 @@ define(["qlik", "./echarts/echarts", "./echarts/world"],
 
                 var geoCoordMap = {}; //地点经纬度配置项
                 var geoName = []; //地区名称数组
+                var dotData = []; //地区对应数据
 
                 for (var x in DataList) {
                     // 地区名称
-                    var geoNameObj = {}; //地区名称
-                    geoNameObj.name = DataList[x][0].qText
-                    geoName.push(geoNameObj);
+                    var geoObj = {}; //地区名称
+                    geoObj.name = DataList[x][0].qText
+                    geoName.push(geoObj);
 
                     // 地点经纬度
                     var geoArr = [];
                     geoArr.push(DataList[x][1].qText, DataList[x][2].qText); //编辑经纬度数组
-                    geoCoordMap[geoNameObj.name] = geoArr; //生成相对应对象
+                    geoCoordMap[geoObj.name] = geoArr; //生成相对应对象
+
+                    // 地区值
+                    var geoValue = DataList[x][3].qNum;
+                    geoObj.value = geoValue;
+                    dotData.push(geoObj);
                 }
 
                 // 航线汇聚点数组
@@ -128,6 +156,25 @@ define(["qlik", "./echarts/echarts", "./echarts/world"],
 
                 }
 
+                // 获取度量名称
+                var MeasureName = qHyperCube.qMeasureInfo[0].qFallbackTitle;
+
+                // 获取数据最大最小值
+                var min = dotData[0].value,
+                    max = 0;
+                for (var j in dotData) {
+                    if (dotData[j].value > max) {
+                        max = dotData[j].value
+                    } else if (dotData[j].value < min) {
+                        min = dotData[j].value
+                    } else {
+                        continue;
+                    }
+                }
+
+                // 地图数据点开关
+                var DotOff = layout.map.props.DotOff;
+
                 var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 
                 // 对航线点进行连接及经纬度坐标点匹配
@@ -142,6 +189,21 @@ define(["qlik", "./echarts/echarts", "./echarts/world"],
                                 fromName: dataItem[0].name,
                                 toName: dataItem[1].name,
                                 coords: [fromCoord, toCoord]
+                            });
+                        }
+                    }
+                    return res;
+                };
+
+                // 对数据点进行经纬度坐标点匹配
+                var convertDataDot = function(data) {
+                    var res = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var geoCoord = geoCoordMap[data[i].name];
+                        if (geoCoord) {
+                            res.push({
+                                name: data[i].name,
+                                value: geoCoord.concat(data[i].value)
                             });
                         }
                     }
@@ -189,30 +251,82 @@ define(["qlik", "./echarts/echarts", "./echarts/world"],
                         }
                     },
                     data: convertData(lineDotArr)
+                }, {
+                    type: 'effectScatter',
+                    name: MeasureName,
+                    effectType: 'ripple',
+                    showEffectOn: 'render',
+                    coordinateSystem: 'geo',
+                    rippleEffect: {
+                        period: 10,
+                        scale: 2.5,
+                        brushType: 'stroke'
+                    },
+                    symbol: 'circle',
+                    symbolSize: 10,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'top',
+
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    // data: convertDataDot(dotData),
+                    data: DotOff ? convertDataDot(dotData) : [],
+                    tooltip: {
+                        formatter: function(params) {
+                            var name = params.name,
+                                value = params.value[2]
+                            seriesName = params.seriesName;
+                            var str = seriesName + '<br/>' + name + ':' + value;
+                            return str;
+                        }
+                    }
                 });
+
+                // 定义筛选组件
+                var visualMap = [{
+                    min: min,
+                    max: max,
+                    show: true,
+                    calculable: true,
+                    left: 'left',
+                    top: 'bottom',
+                    origin: 'vertical',
+                    inRange: {
+                        color: ['#99ccff', '#66ccff', '#66cc99', '#66cc66', '#669966']
+                    }
+                }];
+
+                // 定义geo组件
+                var geo = {
+                    map: 'world',
+                    label: {
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    roam: true,
+                    itemStyle: {
+                        normal: {
+                            areaColor: 'rgba(0,0,0,0)',
+                            borderColor: '#86c9ff'
+                        },
+                        emphasis: {
+                            areaColor: 'rgba(0,0,0,0)'
+                        }
+                    }
+                };
 
                 var option = {
                     tooltip: {
                         trigger: 'item'
                     },
-                    geo: {
-                        map: 'world',
-                        label: {
-                            emphasis: {
-                                show: false
-                            }
-                        },
-                        roam: true,
-                        itemStyle: {
-                            normal: {
-                                areaColor: 'rgba(0,0,0,0)',
-                                borderColor: '#86c9ff'
-                            },
-                            emphasis: {
-                                areaColor: 'rgba(0,0,0,0)'
-                            }
-                        }
-                    },
+                    geo: geo,
+                    visualMap: visualMap,
                     series: series
                 };
 
