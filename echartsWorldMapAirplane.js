@@ -118,17 +118,8 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                 var MeasureName = qHyperCube.qMeasureInfo[0].qFallbackTitle;
 
                 // 获取数据最大最小值
-                var min = dotData[0].value,
-                    max = 0;
-                for (var j in dotData) {
-                    if (dotData[j].value > max) {
-                        max = dotData[j].value
-                    } else if (dotData[j].value < min) {
-                        min = dotData[j].value
-                    } else {
-                        continue;
-                    }
-                }
+                var min = qHyperCube.qMeasureInfo[0].qMin,
+                    max = qHyperCube.qMeasureInfo[0].qMax;
 
                 // 地图数据点开关
                 var DotOff = layout.map.props.DotOff;
