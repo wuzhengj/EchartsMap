@@ -362,19 +362,35 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     series: series
                 };
 
+                // 文字跳动功能
+                function dataBound() {
+                    setInterval(function() {
+                        var arr = [];
+                        arr.push({
+                            name: convertDataDot(dotData)[index].name,
+                            value: convertDataDot(dotData)[index].value
+                        });
+                        effectScatter.data = arr;
+                        index != convertDataDot(dotData).length - 1 ? index++ : 0;
+                        option.series.push(effectScatter);
+                        myCharts.setOption(option);
+                    }, 2000);
+                }
+                var index = 0;
+                if (DotOff) {
+                    
+                    dataBound();
+                } else {
+                    // 获取当前echarts实例
+                    var ChartsInit = echarts.getInstanceByDom(document.getElementById('MapAirPlane'));
+                    // 清空echarts实例
+                    echarts.dispose(ChartsInit);
+                }
+
                 //插入地图
                 var myCharts = echarts.init(document.getElementById('MapAirPlane'));
                 myCharts.setOption(option);
                 myCharts.resize();
-
-                // 文字跳动定时器
-                // var index = 0;
-                // var timer = setInterval(function() {
-                //     effectScatter.data = DotOff ? [{ name: convertDataDot(dotData)[index].name, value: convertDataDot(dotData)[index].value }] : [];
-                //     index != convertDataDot(dotData).length - 1 ? index++ : 0;
-                //     option.series.push(effectScatter);
-                //     myCharts.setOption(option);
-                // }, 2000)
 
                 //needed for export
                 return qlik.Promise.resolve();
