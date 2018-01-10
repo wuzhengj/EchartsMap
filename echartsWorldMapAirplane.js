@@ -1,6 +1,20 @@
 define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./mapLineSetting"],
     function(qlik, echarts, world) {
 
+        var longitude = {
+            type: 'string',
+            component: 'expression',
+            label: '经度',
+            ref: 'qAttributeExpressions.0.qExpression'
+        }
+
+        var latitude = {
+            type: 'string',
+            component: 'expression',
+            label: '纬度',
+            ref: 'qAttributeExpressions.1.qExpression'
+        }
+
         return {
             initialProperties: {
                 qHyperCubeDef: {
@@ -18,7 +32,11 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                 items: {
                     dimensions: {
                         uses: "dimensions",
-                        min: 1
+                        min: 1,
+                        items: {
+                            longitude: longitude,
+                            latitude: latitude
+                        }
                     },
                     measures: {
                         uses: "measures",
@@ -75,11 +93,11 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
 
                     // 地点经纬度
                     var geoArr = [];
-                    geoArr.push(DataList[x][1].qText, DataList[x][2].qText); //编辑经纬度数组
+                    geoArr.push(DataList[x][0].qAttrExps.qValues[0].qNum, DataList[x][0].qAttrExps.qValues[1].qNum); //编辑经纬度数组
                     geoCoordMap[geoObj.name] = geoArr; //生成相对应对象
 
                     // 地区值
-                    var geoValue = DataList[x][3].qNum;
+                    var geoValue = DataList[x][1].qNum;
                     geoObj.value = geoValue;
                     dotData.push(geoObj);
                 }
@@ -234,8 +252,8 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     tooltip: {
                         formatter: function(params) {
                             var name = params.name,
-                                value = params.value[2]
-                            seriesName = params.seriesName;
+                                value = params.value[params.value.length - 1],
+                                seriesName = params.seriesName;
                             var str = seriesName + '<br/>' + name + ':' + value;
                             return str;
                         }
