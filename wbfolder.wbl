@@ -4,3 +4,4 @@ echarts/echarts.min.js;
 echarts/world.js;
 mapDotSetting.js;
 mapLineSetting.js;
+mapSetting.js;

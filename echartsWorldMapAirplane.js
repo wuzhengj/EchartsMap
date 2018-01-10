@@ -1,4 +1,4 @@
-define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./mapLineSetting"],
+define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./mapLineSetting", "./mapSetting"],
     function(qlik, echarts, world) {
 
         var longitude = {
@@ -48,6 +48,14 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     settings: {
                         uses: "settings"
                     },
+                    mapSetting: {
+                        type: 'items',
+                        label: '地图设置',
+                        items: {
+                            lengendOff: lengendOff,
+                            lengendType: lengendType
+                        }
+                    },
                     mapDotSetting: {
                         type: 'items',
                         label: '地图数据点设置',
@@ -62,7 +70,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                             lineType: lineType,
                             centerDot: centerDot,
                         }
-                    },
+                    }
                 }
             },
             support: {
@@ -141,6 +149,12 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
 
                 // 地图数据点开关
                 var DotOff = layout.map.props.DotOff;
+
+                // 图例开关
+                var lengendOff = layout.map.props.lengendOff;
+
+                // 图例类型
+                var lengendType = layout.map.props.lengendType;
 
                 // 图例内容
                 var lengendArr = qHyperCube.qMeasureInfo,
@@ -330,8 +344,8 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
 
                 // 定义图例组件
                 var lengend = {
-                    type: 'plain',
-                    show: true,
+                    type: lengendType,
+                    show: lengendOff,
                     left: 'left',
                     top: 'top',
                     orient: 'horizontal',
