@@ -17,10 +17,10 @@ var lineType = {
         label: "None"
     }, {
         value: 1,
-        label: "聚集"
+        label: "飞入"
     }, {
         value: 2,
-        label: "发散"
+        label: "飞出"
     }],
     defaultValue: 0
 };
