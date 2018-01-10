@@ -2,3 +2,5 @@ echartsWorldMapAirplane.qext;
 echartsWorldMapAirplane.js;
 echarts/echarts.min.js;
 echarts/world.js;
+mapDotSetting.js;
+mapLineSetting.js;
