@@ -353,6 +353,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                 myCharts.setOption(option);
                 myCharts.resize();
 
+                // 文字跳动定时器
                 // var index = 0;
                 // var timer = setInterval(function() {
                 //     effectScatter.data = DotOff ? [{ name: convertDataDot(dotData)[index].name, value: convertDataDot(dotData)[index].value }] : [];
