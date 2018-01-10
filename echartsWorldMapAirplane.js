@@ -184,6 +184,73 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     return res;
                 };
 
+                // 点图移动文字配置
+                var effectScatter = {
+                    type: 'effectScatter',
+                    name: MeasureName,
+                    effectType: 'ripple',
+                    showEffectOn: 'render',
+                    coordinateSystem: 'geo',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                fontSize: 20,
+                                color: 'red'
+                            },
+                            formatter: function(params) {
+                                var name = params.name,
+                                    value = params.value[params.value.length - 1],
+                                    seriesName = params.seriesName;
+                                var str = name + ':' + value;
+                                return str;
+                            }
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    }
+                };
+
+                // 点图配置
+                var effectScatterStatic = {
+                    type: 'effectScatter',
+                    name: MeasureName,
+                    effectType: 'ripple',
+                    showEffectOn: 'render',
+                    coordinateSystem: 'geo',
+                    rippleEffect: {
+                        period: 10,
+                        scale: 2.5,
+                        brushType: 'stroke'
+                    },
+                    symbol: 'circle',
+                    symbolSize: 10,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'top',
+                            textStyle: {
+                                fontSize: 20
+                            }
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    data: DotOff ? convertDataDot(dotData) : [],
+                    tooltip: {
+                        formatter: function(params) {
+                            var name = params.name,
+                                value = params.value[params.value.length - 1],
+                                seriesName = params.seriesName;
+                            var str = seriesName + '<br/>' + name + ':' + value;
+                            return str;
+                        }
+                    }
+                };
+
                 var series = [];
                 series.push({
                     name: '飞机航线图',
@@ -225,40 +292,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                         }
                     },
                     data: convertData(lineDotArr)
-                }, {
-                    type: 'effectScatter',
-                    name: MeasureName,
-                    effectType: 'ripple',
-                    showEffectOn: 'render',
-                    coordinateSystem: 'geo',
-                    rippleEffect: {
-                        period: 10,
-                        scale: 2.5,
-                        brushType: 'stroke'
-                    },
-                    symbol: 'circle',
-                    symbolSize: 10,
-                    label: {
-                        normal: {
-                            show: false,
-                            position: 'top',
-
-                        },
-                        emphasis: {
-                            show: false
-                        }
-                    },
-                    data: DotOff ? convertDataDot(dotData) : [],
-                    tooltip: {
-                        formatter: function(params) {
-                            var name = params.name,
-                                value = params.value[params.value.length - 1],
-                                seriesName = params.seriesName;
-                            var str = seriesName + '<br/>' + name + ':' + value;
-                            return str;
-                        }
-                    }
-                });
+                }, effectScatterStatic);
 
                 // 定义筛选组件
                 var visualMap = [{
@@ -318,6 +352,15 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                 var myCharts = echarts.init(document.getElementById('MapAirPlane'));
                 myCharts.setOption(option);
                 myCharts.resize();
+
+                // var index = 0;
+                // var timer = setInterval(function() {
+                //     effectScatter.data = DotOff ? [{ name: convertDataDot(dotData)[index].name, value: convertDataDot(dotData)[index].value }] : [];
+                //     index != convertDataDot(dotData).length - 1 ? index++ : 0;
+                //     option.series.push(effectScatter);
+                //     myCharts.setOption(option);
+                // }, 2000)
+
                 //needed for export
                 return qlik.Promise.resolve();
             }
