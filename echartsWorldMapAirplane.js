@@ -210,8 +210,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                             show: true,
                             position: 'top',
                             textStyle: {
-                                fontSize: 20,
-                                color: 'red'
+                                fontSize: 15,
                             },
                             formatter: function(params) {
                                 var name = params.name,
@@ -362,9 +361,20 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     series: series
                 };
 
+                var timer = null;
                 // 文字跳动功能
                 function dataBound() {
-                    setInterval(function() {
+                    // 获取定时器时间
+                    var elementTimer = $element.attr('timer');
+                    if (elementTimer) {
+                        // 清空定时器
+                        clearInterval(elementTimer);
+                        // 获取当前echarts实例
+                        var ChartsInit = echarts.getInstanceByDom(document.getElementById('MapAirPlane'));
+                        // 清空echarts实例
+                        echarts.dispose(ChartsInit);
+                    }
+                    timer = setInterval(function() {
                         var arr = [];
                         arr.push({
                             name: convertDataDot(dotData)[index].name,
@@ -372,13 +382,17 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                         });
                         effectScatter.data = arr;
                         index != convertDataDot(dotData).length - 1 ? index++ : 0;
+                        
+                        //添加跳动属性 
                         option.series.push(effectScatter);
                         myCharts.setOption(option);
+
+                        // 挂载当前定时器时间
+                        $element.attr('timer', timer);
                     }, 2000);
                 }
                 var index = 0;
                 if (DotOff) {
-                    
                     dataBound();
                 } else {
                     // 获取当前echarts实例
