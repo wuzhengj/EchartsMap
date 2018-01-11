@@ -381,7 +381,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                             value: convertDataDot(dotData)[index].value
                         });
                         effectScatter.data = arr;
-                        index != convertDataDot(dotData).length - 1 ? index++ : 0;
+                        index != convertDataDot(dotData).length - 1 ? index++ : index=0;
                         
                         //添加跳动属性 
                         option.series.push(effectScatter);
