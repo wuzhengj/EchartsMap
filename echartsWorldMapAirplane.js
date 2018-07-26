@@ -75,6 +75,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                         items: {
                             lineType: lineType,
                             centerDot: centerDot,
+                            lineColor: lineColor
                         }
                     }
                 }
@@ -122,6 +123,8 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                 var lineDotArr = [];
                 // 是否开启航线
                 var lineOff = layout.map.props.lineType;
+                // 航线颜色
+                var lineColor = layout.map.props.lineColor;
                 if (lineOff) { //如果当前选择开启航线
                     // 航线汇聚点
                     var lineDot = {};
@@ -318,7 +321,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     },
                     lineStyle: {
                         normal: {
-                            color: '#fff',
+                            color: lineColor,
                             width: 1,
                             opacity: 0.6,
                             curveness: 0.2

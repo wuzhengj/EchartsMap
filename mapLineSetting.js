@@ -24,3 +24,14 @@ var lineType = {
     }],
     defaultValue: 0
 };
+
+// 连线颜色
+var lineColor = {
+    type: "string",
+    label: "飞行线颜色",
+    ref: "map.props.lineColor",
+    show: function(data){
+        return data.map.props.lineType != 0;
+    },
+    defaultValue: "#fff"
+}
