@@ -87,7 +87,7 @@ var geoBorderColor = {
 // 鼠标移上去地图背景色
 var geoHoverBackgroundColor = {
     ref: "map.props.geoHoverBackgroundColor",
-    label: "地图背景色",
+    label: "鼠标移动到地图上时地图背景色",
     type: "string",
     defaultValue: "rgba(0,0,0,0)",
 }
