@@ -52,6 +52,9 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                         type: 'items',
                         label: '地图设置',
                         items: {
+                            geoBackgroundColor: geoBackgroundColor,
+                            geoBorderColor: geoBorderColor,
+                            geoHoverBackgroundColor: geoHoverBackgroundColor,
                             lengendOff: lengendOff,
                             lengendType: lengendType,
                             lengendColor: lengendColor,
@@ -174,6 +177,11 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                 // 筛选器
                 var visualMapOff = layout.map.props.visualMapOff;
                 var visualMapColor = layout.map.props.visualMapColor;
+
+                // 地图配置
+                var geoBackgroundColor = layout.map.props.geoBackgroundColor;
+                var geoBorderColor = layout.map.props.geoBorderColor;
+                var geoHoverBackgroundColor = layout.map.props.geoHoverBackgroundColor;
 
                 var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 
@@ -331,7 +339,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     inRange: {
                         color: ['#99ccff', '#66ccff', '#66cc99', '#66cc66', '#669966']
                     },
-                    textStyle:{
+                    textStyle: {
                         color: visualMapColor
                     }
                 }];
@@ -347,11 +355,11 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     roam: true,
                     itemStyle: {
                         normal: {
-                            areaColor: 'rgba(0,0,0,0)',
-                            borderColor: '#86c9ff'
+                            areaColor: geoBackgroundColor,
+                            borderColor: geoBorderColor
                         },
                         emphasis: {
-                            areaColor: 'rgba(0,0,0,0)'
+                            areaColor: geoHoverBackgroundColor
                         }
                     }
                 };
@@ -364,7 +372,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     top: 'top',
                     orient: 'horizontal',
                     data: lengendContent,
-                    textStyle:{
+                    textStyle: {
                         color: lengendColor
                     }
                 }
@@ -399,8 +407,8 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                             value: convertDataDot(dotData)[index].value
                         });
                         effectScatter.data = arr;
-                        index != convertDataDot(dotData).length - 1 ? index++ : index=0;
-                        
+                        index != convertDataDot(dotData).length - 1 ? index++ : index = 0;
+
                         //添加跳动属性 
                         option.series.push(effectScatter);
                         myCharts.setOption(option);

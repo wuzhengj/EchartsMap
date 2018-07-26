@@ -67,3 +67,27 @@ var visualMapColor = {
         return data.map.props.visualMapOff == true
     }
 }
+
+// 地图背景色
+var geoBackgroundColor = {
+    ref: "map.props.geoBackgroundColor",
+    label: "地图背景色",
+    type: "string",
+    defaultValue: "rgba(0,0,0,0)",
+}
+
+// 地图边线颜色
+var geoBorderColor = {
+    ref: "map.props.geoBorderColor",
+    label: "地图边框色",
+    type: "string",
+    defaultValue: "#86c9ff",
+}
+
+// 鼠标移上去地图背景色
+var geoHoverBackgroundColor = {
+    ref: "map.props.geoHoverBackgroundColor",
+    label: "地图背景色",
+    type: "string",
+    defaultValue: "rgba(0,0,0,0)",
+}
