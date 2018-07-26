@@ -30,3 +30,40 @@ var lengendType = {
         return data.map.props.lengendOff == true
     }
 }
+
+var lengendColor = {
+    ref: "map.props.lengendColor",
+    label: "图例文本颜色",
+    type: "string",
+    defaultValue: "#ffffff",
+    show: function(data) {
+        return data.map.props.lengendOff == true
+    }
+}
+
+// 筛选组件
+var visualMapOff = {
+    ref: "map.props.visualMapOff",
+    label: "是否开启筛选器",
+    type: "boolean",
+    component: 'switch',
+    options: [{
+        value: true,
+        label: "On"
+    }, {
+        value: false,
+        label: "Off"
+    }],
+    defaultValue: false,
+}
+
+// 筛选文本颜色
+var visualMapColor = {
+    ref: "map.props.visualMapColor",
+    label: "筛选器文本颜色",
+    type: "string",
+    defaultValue: "#ffffff",
+    show: function(data) {
+        return data.map.props.visualMapOff == true
+    }
+}
