@@ -1,5 +1,5 @@
-define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./mapLineSetting", "./mapSetting"],
-    function(qlik, echarts, world) {
+define(["qlik", "./echarts/echarts", "./echarts/world", "./echarts/china", "./mapDotSetting", "./mapLineSetting", "./mapSetting"],
+    function(qlik, echarts, world, china) {
 
         var longitude = {
             type: 'string',
@@ -59,7 +59,8 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                             lengendType: lengendType,
                             lengendColor: lengendColor,
                             visualMapOff: visualMapOff,
-                            visualMapColor: visualMapColor
+                            visualMapColor: visualMapColor,
+                            mapType: mapType
                         }
                     },
                     mapDotSetting: {
@@ -88,6 +89,8 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
             paint: function($element, layout) {
                 $element.addClass('EBI-Basic');
 
+                var _self = this;
+
                 //add your rendering code here
                 var elementWidth = $element.css('width'),
                     elementHeight = $element.css('height');
@@ -106,6 +109,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                     // 地区名称
                     var geoObj = {}; //地区名称
                     geoObj.name = DataList[x][0].qText
+                    geoObj.qElemNumber = DataList[x][0].qElemNumber;
                     geoName.push(geoObj);
 
                     // 地点经纬度
@@ -185,6 +189,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                 var geoBackgroundColor = layout.map.props.geoBackgroundColor;
                 var geoBorderColor = layout.map.props.geoBorderColor;
                 var geoHoverBackgroundColor = layout.map.props.geoHoverBackgroundColor;
+                var mapType = layout.map.props.mapType;
 
                 var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 
@@ -214,6 +219,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                         if (geoCoord) {
                             res.push({
                                 name: data[i].name,
+                                qElemNumber: data[i].qElemNumber,
                                 value: geoCoord.concat(data[i].value)
                             });
                         }
@@ -349,7 +355,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
 
                 // 定义geo组件
                 var geo = {
-                    map: 'world',
+                    map: mapType,
                     label: {
                         emphasis: {
                             show: false
@@ -433,6 +439,9 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./mapDotSetting", "./ma
                 //插入地图
                 var myCharts = echarts.init(document.getElementById('MapAirPlane'));
                 myCharts.setOption(option);
+                myCharts.on('click', function(data){
+                    _self.selectValues(0, [data.data.qElemNumber], true)
+                })
                 myCharts.resize();
 
                 //needed for export

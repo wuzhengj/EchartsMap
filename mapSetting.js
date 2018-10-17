@@ -91,3 +91,19 @@ var geoHoverBackgroundColor = {
     type: "string",
     defaultValue: "rgba(0,0,0,0)",
 }
+
+// 地图属性
+var mapType = {
+    ref: "map.props.mapType",
+    label: "地图类型",
+    type: "string",
+    component: "dropdown",
+    options: [{
+        value: "world",
+        label: "世界地图"
+    },{
+        value: "china",
+        label: "中国地图"
+    }],
+    defaultValue: "world"
+}
