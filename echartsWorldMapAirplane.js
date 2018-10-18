@@ -76,7 +76,8 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./echarts/china", "./ma
                         items: {
                             lineType: lineType,
                             centerDot: centerDot,
-                            lineColor: lineColor
+                            lineColor: lineColor,
+                            lineIcon: lineIcon
                         }
                     }
                 }
@@ -190,9 +191,11 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./echarts/china", "./ma
                 var geoBorderColor = layout.map.props.geoBorderColor;
                 var geoHoverBackgroundColor = layout.map.props.geoHoverBackgroundColor;
                 var mapType = layout.map.props.mapType;
+                var lineIcon = layout.map.props.lineIcon;
 
-                var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
+                // var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 
+                var planePath = lineIcon;
                 // 对航线点进行连接及经纬度坐标点匹配
                 var convertData = function(data) {
                     var res = [];
@@ -439,7 +442,7 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./echarts/china", "./ma
                 //插入地图
                 var myCharts = echarts.init(document.getElementById('MapAirPlane'));
                 myCharts.setOption(option);
-                myCharts.on('click', function(data){
+                myCharts.on('click', function(data) {
                     _self.selectValues(0, [data.data.qElemNumber], true)
                 })
                 myCharts.resize();

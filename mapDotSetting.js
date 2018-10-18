@@ -5,10 +5,10 @@ var DotOff = {
     ref: "map.props.DotOff",
     options: [{
         value: true,
-        label: "On"
+        label: "开启"
     }, {
         value: false,
-        label: "Off"
+        label: "关闭"
     }],
     defaultValue: true
 }
