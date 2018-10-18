@@ -101,9 +101,54 @@ var mapType = {
     options: [{
         value: "world",
         label: "世界地图"
-    },{
+    }, {
         value: "china",
         label: "中国地图"
     }],
     defaultValue: "world"
+}
+
+// 设置标题
+var mapTitle = {
+    ref: "map.props.mapTitle",
+    label: "标题",
+    type: "string",
+    show: function(data) {
+        return data.map.props.showMapTitle;
+    }
+}
+
+// 是否开启标题
+var showMapTitle = {
+    ref: "map.props.showMapTitle",
+    label: "是否开启标题",
+    component: "switch",
+    type: "boolean",
+    options: [{
+        value: true,
+        label: "开启"
+    }, {
+        value: false,
+        label: "关闭"
+    }]
+}
+
+// 标题字体颜色
+var mapTitleColor = {
+    ref: "map.props.mapTitleColor",
+    label: "标题字体颜色",
+    type: "string",
+    show: function(data) {
+        return data.map.props.showMapTitle;
+    }
+}
+
+// 标题字体大小
+var mapTitleSize = {
+    ref: "map.props.mapTitleSize",
+    label: "标题字体颜色",
+    type: "string",
+    show: function(data) {
+        return data.map.props.showMapTitle;
+    }
 }

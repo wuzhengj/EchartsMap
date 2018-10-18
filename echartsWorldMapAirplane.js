@@ -60,7 +60,11 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./echarts/china", "./ma
                             lengendColor: lengendColor,
                             visualMapOff: visualMapOff,
                             visualMapColor: visualMapColor,
-                            mapType: mapType
+                            mapType: mapType,
+                            showMapTitle: showMapTitle,
+                            mapTitle: mapTitle,
+                            mapTitleColor: mapTitleColor,
+                            mapTitleSize: mapTitleSize
                         }
                     },
                     mapDotSetting: {
@@ -165,6 +169,18 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./echarts/china", "./ma
 
                 // 地图数据点开关
                 var DotOff = layout.map.props.DotOff;
+
+                // 标题开关
+                var showMapTitle = layout.map.props.showMapTitle;
+
+                // 标题内容
+                var mapTitle = layout.map.props.mapTitle;
+
+                // 标题大小
+                var mapTitleSize = layout.map.props.mapTitleSize;
+
+                // 标题颜色
+                var mapTitleColor = layout.map.props.mapTitleColor;
 
                 // 图例开关
                 var lengendOff = layout.map.props.lengendOff;
@@ -392,6 +408,14 @@ define(["qlik", "./echarts/echarts", "./echarts/world", "./echarts/china", "./ma
                 var option = {
                     tooltip: {
                         trigger: 'item'
+                    },
+                    title: {
+                        show: showMapTitle,
+                        text: mapTitle,
+                        textStyle: {
+                            color: mapTitleColor,
+                            fontSize: mapTitleSize
+                        }
                     },
                     legend: lengend,
                     geo: geo,
