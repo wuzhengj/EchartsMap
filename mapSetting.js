@@ -146,7 +146,7 @@ var mapTitleColor = {
 // 标题字体大小
 var mapTitleSize = {
     ref: "map.props.mapTitleSize",
-    label: "标题字体颜色",
+    label: "标题字体大小",
     type: "string",
     show: function(data) {
         return data.map.props.showMapTitle;
